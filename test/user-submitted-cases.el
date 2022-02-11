@@ -237,3 +237,18 @@
      (with-temp-buffer
        (insert buffer-state)
        (parinfer-rust--check-for-indentation)))))
+
+(ert-deftest handles-utf-8 ()
+  (let ((test
+         '(:before
+                  "(func 中)"
+                  :after
+                  "(func 中 )"
+                  :commands (((:lineNo 0 :column 8) (lambda () (insert " ")))))))
+    (should
+     (string=
+      (simulate-parinfer-in-another-buffer--with-commands (plist-get test :before)
+                                                          "smart"
+                                                          (plist-get test :commands)
+                                                          (plist-get test :setup))
+      (plist-get test :after)))))
