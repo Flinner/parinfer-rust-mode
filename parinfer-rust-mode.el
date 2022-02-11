@@ -402,7 +402,6 @@ CHANGES."
              (error-p (parinfer-rust-get-in-answer answer "error")))
         ;; We don't want other hooks to run while we're modifying the buffer
         ;; that could lead to weird and unwanted behavior
-        (setq-local inhibit-modification-hooks t)
         (when (and (local-variable-if-set-p 'parinfer-rust--in-debug)
                    parinfer-rust--in-debug)
           (parinfer-rust-debug "./parinfer-rust-debug.txt" options answer))
@@ -423,9 +422,7 @@ CHANGES."
         (when-let ((new-x (parinfer-rust-get-in-answer answer "cursor_x"))
                    (new-line (parinfer-rust-get-in-answer answer "cursor_line")))
           (parinfer-rust--reposition-cursor new-x new-line))
-        (setq parinfer-rust--previous-options options)
-        (with-no-warnings ;; TODO: Should not need with-no-warnings function
-          (setq-local inhibit-modification-hooks nil))))))
+        (setq parinfer-rust--previous-options options)))))
 
 ;; Interactive or functions meant to be called by user
 (defun parinfer-rust-toggle-debug ()
